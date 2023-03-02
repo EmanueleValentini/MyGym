@@ -12,6 +12,8 @@ public interface UserRepository extends JpaRepository <User,Long> {
     List<User> findByActiveFlagTrue();
 
     // TODO: find by activeFlag=true AND have an active subscription --> @query
-    @Query("SELECT u FROM User u where activeFlag = true && u.subscription.endDate < currentDate")
+    @Query("SELECT u FROM User u where activeFlag = true && u.subscription.endDate < currentDate && u.subscription.paid = true")
     List<User> findByActiveFlagTrueAndSubscriptionActive();
+
+    User findByEmail(String email);
 }
