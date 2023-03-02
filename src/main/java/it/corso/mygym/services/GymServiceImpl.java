@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class GymServiceImpl implements GymService{
     @Autowired
-    GymRepository repo;
+    private GymRepository repo;
     @Override
     public Gym save(GymDto gymDto) {
         ModelMapper modelMapper = new ModelMapper();

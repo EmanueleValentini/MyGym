@@ -13,6 +13,6 @@ public class GymDto {
     private String name;
     private String address;
     private String email;
-    private String pIva;
+    private String vat;
 
 }

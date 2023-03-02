@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GymRepository extends JpaRepository<Gym,Long> {
-    Gym findByPIva(String pIva);
+    Gym findByVat(String vat);
 
     Gym findByEmail(String email);
 }
