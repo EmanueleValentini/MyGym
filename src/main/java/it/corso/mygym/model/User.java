@@ -30,8 +30,7 @@ public class User implements Serializable {
     private LocalDate birthDate;
     @Column(nullable = false)
     private boolean medicalCert;
-    @Column(nullable = false)
-    private boolean activated;
+    private boolean activeFlag = true;
     @OneToMany(mappedBy = "user")
     private List<Subscription> subscriptions;
 }
