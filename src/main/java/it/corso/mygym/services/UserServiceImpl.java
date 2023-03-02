@@ -1,7 +1,9 @@
 package it.corso.mygym.services;
 
 import it.corso.mygym.model.User;
+import it.corso.mygym.model.dto.UserDto;
 import it.corso.mygym.repositories.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +15,13 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository repo;
     @Override
-    public User save(User user) {
+    public User save(UserDto userDto) {
         //TODO controllare se la email dell'utente è già presente nel db
-        if(repo.findByEmail(user.getEmail())!=null){
+        if(repo.findByEmail(userDto.getEmail())!=null){
             return null;
         }
-        return repo.save(user);
+        ModelMapper modelMapper = new ModelMapper();
+        return repo.save(modelMapper.map(userDto,User.class));
     }
 
     @Override
@@ -32,10 +35,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Optional<User> update(Long id, User user) {
+    public Optional<User> update(Long id, UserDto userDto) {
         Optional<User> existingUser = repo.findById(id);
+        ModelMapper modelMapper = new ModelMapper();
         if (existingUser.isPresent()) {
-            User updatedUser = repo.save(user);
+            User updatedUser = repo.save(modelMapper.map(userDto,User.class));
             return Optional.of(updatedUser);
         } else {
             return Optional.empty();
