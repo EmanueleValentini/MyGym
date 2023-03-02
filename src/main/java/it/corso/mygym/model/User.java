@@ -24,7 +24,7 @@ public class User implements Serializable {
     private String name;
     @Column(length = 30,nullable = false)
     private String surname;
-    @Column(nullable = false)
+    @Column(name = "email", length = 50, unique = true, nullable = false)
     private String email;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
