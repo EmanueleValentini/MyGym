@@ -1,7 +1,9 @@
 package it.corso.mygym.services;
 
+import it.corso.mygym.Constants;
 import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
+import it.corso.mygym.model.exceptions.UserNotFoundException;
 import it.corso.mygym.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Optional<User> findById(Long id) {
+        validateExist(id);
         return repo.findById(id);
     }
 
@@ -36,6 +39,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Optional<User> update(Long id, UserDto userDto) {
+        validateExist(id);
         Optional<User> existingUser = repo.findById(id);
         ModelMapper modelMapper = new ModelMapper();
         if (existingUser.isPresent()) {
@@ -54,5 +58,9 @@ public class UserServiceImpl implements UserService{
             repo.deleteById(id);
         }
         return userToDelete;
+    }
+
+    public void validateExist(Long id){
+        if(repo.findById(id).isEmpty()) throw new UserNotFoundException(Constants.USER_NOT_FOUND_EXCEPTION,id);
     }
 }

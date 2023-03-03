@@ -2,6 +2,7 @@ package it.corso.mygym.controller;
 
 import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
+import it.corso.mygym.model.exceptions.UserNotFoundException;
 import it.corso.mygym.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,8 @@ public class UserControllerImpl implements UserController{
     }
     @GetMapping("/{id}")
     @Override
-    public ResponseEntity<Optional<User>> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<Optional<User>> findById(@PathVariable("id") Long id)
+            throws UserNotFoundException{
         Optional<User> userFind = userService.findById(id);
         return new ResponseEntity<>(userFind,HttpStatus.FOUND);
     }
@@ -42,10 +44,14 @@ public class UserControllerImpl implements UserController{
 
     @PutMapping("/{id}")
     @Override
-    public ResponseEntity<Optional<User>> update(@PathVariable("id") Long id,@RequestBody UserDto userDto) {
+    public ResponseEntity<Optional<User>> update(@PathVariable("id") Long id,@RequestBody UserDto userDto)
+            throws UserNotFoundException {
         Optional<User> userFound = userService.update(id,userDto);
         return new ResponseEntity<>(userFound,HttpStatus.ACCEPTED);
     }
 
-
+    @ExceptionHandler({UserNotFoundException.class})
+    public ResponseEntity<?> userNotFound(RuntimeException e){
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+    }
 }
