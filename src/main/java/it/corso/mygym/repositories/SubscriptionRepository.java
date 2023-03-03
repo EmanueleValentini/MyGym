@@ -5,6 +5,7 @@ import it.corso.mygym.model.dto.SubscriptionDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -13,7 +14,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription,Long>
     List<Subscription> findByPaidTrue();
 
     // TODO: find by active subscription
-    List<Subscription> findBySubscriptionEndDateLowerThanCurrentDate();
+    List<Subscription> findByEndDateBefore(Date data);
 
 
 }

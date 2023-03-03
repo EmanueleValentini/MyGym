@@ -14,7 +14,7 @@ public interface UserService {
     Optional<User> findById(Long id);
 
     //TODO findAll()
-    List<User> findAll();
+    List<User> findAll(boolean activeFlag);
 
     //TODO update(Long id, User user)
     Optional<User> update(Long id, UserDto userDto);
