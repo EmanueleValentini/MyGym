@@ -44,10 +44,10 @@ public class UserControllerImpl implements UserController{
 
     @PutMapping("/{id}")
     @Override
-    public ResponseEntity<Optional<User>> update(@PathVariable("id") Long id,@RequestBody UserDto userDto)
+    public ResponseEntity<User> update(@PathVariable("id") Long id,@RequestBody UserDto userDto)
             throws UserNotFoundException {
-        Optional<User> userFound = userService.update(id,userDto);
-        return new ResponseEntity<>(userFound,HttpStatus.ACCEPTED);
+        User userFound = userService.update(id,userDto);
+        return ResponseEntity.ok(userFound);
     }
 
     @ExceptionHandler({UserNotFoundException.class})

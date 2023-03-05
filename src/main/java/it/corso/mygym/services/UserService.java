@@ -18,7 +18,7 @@ public interface UserService {
     List<User> findAll(boolean activeFlag);
 
     //TODO update(Long id, User user)
-    Optional<User> update(Long id, UserDto userDto) throws UserNotFoundException;
+    User update(Long id, UserDto userDto) throws UserNotFoundException;
 
     void validateExist(Long id);
 

@@ -6,11 +6,16 @@ import it.corso.mygym.model.dto.UserDto;
 import it.corso.mygym.model.exceptions.UserNotFoundException;
 import it.corso.mygym.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -38,16 +43,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Optional<User> update(Long id, UserDto userDto) {
-        validateExist(id);
-        Optional<User> existingUser = repo.findById(id);
-        ModelMapper modelMapper = new ModelMapper();
-        if (existingUser.isPresent()) {
-            User updatedUser = repo.save(modelMapper.map(userDto,User.class));
-            return Optional.of(updatedUser);
-        } else {
-            return Optional.empty();
-        }
+    public User update(Long id, UserDto userDto) {
+        validateExist(id); // may throw the UserNotFoundException
+        User userEntity = repo.findById(id).get();
+        copyNonNullProperties(userDto, userEntity);
+        return repo.saveAndFlush(userEntity);
     }
 
     @Override
@@ -62,5 +62,21 @@ public class UserServiceImpl implements UserService{
 
     public void validateExist(Long id){
         if(repo.findById(id).isEmpty()) throw new UserNotFoundException(Constants.USER_NOT_FOUND_EXCEPTION,id);
+    }
+    static void copyNonNullProperties(Object src, Object target) {
+        BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
+    }
+
+    public static String[] getNullPropertyNames(Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new HashSet<String>();
+        for (java.beans.PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) emptyNames.add(pd.getName());
+        }
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
     }
 }

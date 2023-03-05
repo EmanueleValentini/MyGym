@@ -38,6 +38,6 @@ public interface UserController {
     ResponseEntity<List<User>> findAll(boolean activeFlag);
 
     @PutMapping("/{id}")
-    ResponseEntity<Optional<User>> update(@PathVariable("id") Long id, @RequestBody UserDto userDto)
+    ResponseEntity<User> update(@PathVariable("id") Long id, @RequestBody UserDto userDto)
             throws UserNotFoundException;
 }
