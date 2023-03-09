@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
-COPY target/mygym-0.0.1-SNAPSHOT .source
+COPY target/mygym-0.0.1-SNAPSHOT ./target
 EXPOSE 8080
-CMD ["java","-jar","source/mygym-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/target/mygym-0.0.1-SNAPSHOT.jar"]
